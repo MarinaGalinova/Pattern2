@@ -25,6 +25,7 @@ public class DataGenerator {
 
     private DataGenerator() {
     }
+
     @BeforeAll
     static void setUpAll() {
         // сам запрос
@@ -36,38 +37,41 @@ public class DataGenerator {
                 .then() // "тогда ожидаем"
                 .statusCode(200); // код 200 OK
     }
+
     private static void sendRequest(RegistrationDto user) {
         given()
                 .spec(requestSpec)
                 .body(user)
                 .when()
-                     .post("/api/system/users")
+                .post("/api/system/users")
                 .then()
                 .statusCode(200);
     }
-    public static String getRandomLogin() {
 
-        // TODO: добавить логику для объявления переменной login и задания её значения, для генерации
-        //  случайного логина используйте faker
+    public static String getRandomLogin() {
+        String login = faker.name().username();
         return login;
     }
 
     public static String getRandomPassword() {
-        // TODO: добавить логику для объявления переменной password и задания её значения, для генерации
-        //  случайного пароля используйте faker
+        String password = faker.internet().password();
         return password;
     }
 
     public static class Registration {
         private Registration() {
+
         }
 
         public static RegistrationDto getUser(String status) {
+            var user = new RegistrationDto(getRandomLogin(), getRandomPassword(), status);
             // TODO: создать пользователя user используя методы getRandomLogin(), getRandomPassword() и параметр status
             return user;
         }
 
         public static RegistrationDto getRegisteredUser(String status) {
+            var registeredUser = getUser(status);
+            sendRequest(registeredUser);
             // TODO: объявить переменную registeredUser и присвоить ей значение возвращённое getUser(status).
             // Послать запрос на регистрацию пользователя с помощью вызова sendRequest(registeredUser)
             return registeredUser;
