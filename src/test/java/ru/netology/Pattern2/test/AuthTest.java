@@ -10,7 +10,6 @@ import static ru.netology.Pattern2.data.DataGenerator.Registration.getUser;
 import static ru.netology.Pattern2.data.DataGenerator.getRandomLogin;
 import static ru.netology.Pattern2.data.DataGenerator.getRandomPassword;
 
-
 class AuthTest {
 
     @BeforeEach

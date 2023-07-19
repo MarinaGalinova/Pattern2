@@ -7,6 +7,7 @@ import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import lombok.Value;
 import lombok.val;
+import org.junit.jupiter.api.BeforeAll;
 
 import java.util.Locale;
 
@@ -24,14 +25,28 @@ public class DataGenerator {
 
     private DataGenerator() {
     }
-
-    private static void sendRequest(RegistrationDto user) {
-        // TODO: отправить запрос на указанный в требованиях path, передав в body запроса объект user
-        //  и не забудьте передать подготовленную спецификацию requestSpec.
-        //  Пример реализации метода показан в условии к задаче.
+    @BeforeAll
+    static void setUpAll() {
+        // сам запрос
+        given() // "дано"
+                .spec(requestSpec) // указываем, какую спецификацию используем
+                .body(new RegistrationDto("vasya", "password", "active")) // передаём в теле объект, который будет преобразован в JSON
+                .when() // "когда"
+                .post("/api/system/users") // на какой путь относительно BaseUri отправляем запрос
+                .then() // "тогда ожидаем"
+                .statusCode(200); // код 200 OK
     }
-
+    private static void sendRequest(RegistrationDto user) {
+        given()
+                .spec(requestSpec)
+                .body(user)
+                .when()
+                     .post("/api/system/users")
+                .then()
+                .statusCode(200);
+    }
     public static String getRandomLogin() {
+
         // TODO: добавить логику для объявления переменной login и задания её значения, для генерации
         //  случайного логина используйте faker
         return login;
